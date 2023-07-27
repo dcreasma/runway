@@ -1,4 +1,7 @@
 #' @export
+#' @import ggplot2
+#' @import ggvenn
+#' @import ggwordcloud
 catwalk_anovas <-
   function(catwalkdataset,
            formula = 1,
