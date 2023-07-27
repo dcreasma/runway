@@ -1,7 +1,4 @@
 #' @export
-#' @import ggplot2
-#' @import ggvenn
-#' @import ggwordcloud
 catwalk_anovas <-
   function(catwalkdataset,
            formula = 1,
@@ -119,6 +116,9 @@ sigmoidal_trans <- function(a = 40, cutoff = 0.05) {
 #' @param anova_results An integer specifying the index of the ANOVA model to use for the heatmap.
 #' @return A `ggplot` object representing the heatmap.
 #' @export
+#' @import ggplot2
+#' @import A86
+
 
 catwalk_heatmap_aov <-
   function(catwalkdataset, anova_results = 1) {
@@ -134,10 +134,10 @@ catwalk_heatmap_aov <-
 
     # create a heatmap plot with significant p-values
     heatmap <-
-      ggplot(data_to_graph, aes(x = factor, y = parameter, fill = pval)) +
-      geom_tile() +
+      ggplot2::ggplot(data_to_graph, aes(x = factor, y = parameter, fill = pval)) +
+      ggplot2::geom_tile() +
       # set color scale using sigmoidal transformation
-      scale_fill_gradient(
+      ggplot2::scale_fill_gradient(
         high = "red",
         low = "blue",
         trans = "sigmoidal",
@@ -145,9 +145,9 @@ catwalk_heatmap_aov <-
         breaks = c(cutoff / 5, cutoff, cutoff * 2, .99)
       ) +
       # apply custom theme from the theme_A86() function
-      theme_A86() +
+      A86::theme_A86() +
       # set y-axis text size to 6
-      theme(axis.text.y = element_text(size = 6))
+      ggplot2::theme(axis.text.y = element_text(size = 6))
 
     # return the heatmap plot
     heatmap
@@ -159,7 +159,10 @@ catwalk_heatmap_aov <-
 #' @param subset A function that will be applied to the hit list to determine which factors/combinations of factors to include in the graph. Default is NULL, which will include all hits.
 #' @export
 #' @return A ggvenn object representing the Venn diagram.
-#'
+#' @import ggplot2
+#' @import ggvenn
+
+
 catwalk_venn <- function(catwalkdataset,
                          anova_results = 1,
                          subset = NULL) {
@@ -238,6 +241,8 @@ catwalk_umap <- function(catwalkdataset,
 }
 
 #' @export
+#' @import ggplot2
+#' @import ggwordcloud
 catwalk_tag_analysis <-
   function(catwalkdataset,
            anova_results = 1,

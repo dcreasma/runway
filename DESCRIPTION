@@ -24,4 +24,6 @@ Imports:
     stringr,
     rlang,
     stats,
-    scales
+    scales,
+    A86
+Remotes: dcreasma/A86
