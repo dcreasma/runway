@@ -1,3 +1,14 @@
+#' Performs aov modeling on the dependent variables in a given dataset, using the relationship of the independent variables as dictated by the designated formula
+#'
+#' @param catwalkdataset A CatwalkDataset
+#' @param formula A CatwalkDataset
+#' @param dataname A character, or character vector, containing the name of the data within the CatwalkDataset to be used for the analysis.
+#' If a vector of names is passed, the function will use the first name found in the CatwalkDataset
+#' @param exc_vars A character vector of any variable names to be excluded from the analysis
+#' @param cutoff The value at which p-values lower than this number will be considered "statistically significant"
+#' @param make_default A boolean that will designate the output of this analysis as the default output to be reference for any future visualization or follow-up analyses
+#' @param allow_duplicates A boolean that designates whether or not to allow the creation of two sets of models using the same data, formula, and cutoff within the same CatwalkDataset
+#'
 #' @export
 catwalk_anovas <-
   function(catwalkdataset,
@@ -5,15 +16,37 @@ catwalk_anovas <-
            dataname = c("data_norm", "data_clean"),
            exc_vars = character(),
            cutoff = 0.05,
-           make_default = F) {
+           make_default = F,
+           allow_duplicates = F) {
     data <-
       catwalk_get_data_from_dataset(catwalkdataset, dataname = dataname)
+
+    for (name in dataname){
+      if(name %in% names(catwalkdataset@data)){
+        data_used <- name
+        break
+      }
+    }
+
     if (inherits(formula, "numeric")) {
       formula <- catwalkdataset@formulas[formula]
     }
     if (is.na(formula)) {
       stop("formula not found at location provided, or no default formula available")
     }
+
+    for (model in catwalkdataset@models) {
+      if (!allow_duplicates &&
+        data_used == model$data_used &&
+          formula == model$formula_used &&
+          cutoff == model$cutoff){
+        warning("Warning: Models using this combination of formula, cuttoff, and dataset exist already within this CatwalkDataset, execution ceased before duplicate models were generated. Set the argument 'allow_duplicates' = TRUE to bypass this.")
+        return(catwalkdataset)
+      }
+
+
+      }
+
     variable_names <- data %>%
       dplyr::select(!c("group", "time_point", "animal", "experiment")) %>%
       dplyr::select_if(is.numeric) %>% colnames()
@@ -60,7 +93,7 @@ catwalk_anovas <-
     new_model <-
       list(
         list(
-          data_used = dataname,
+          data_used = data_used,
           formula_used = formula,
           cutoff = cutoff,
           models = aov_models,
