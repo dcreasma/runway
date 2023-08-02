@@ -30,6 +30,9 @@ If a vector of names is passed, the function will use the first name found in th
 
 \item{allow_duplicates}{A boolean that designates whether or not to allow the creation of two sets of models using the same data, formula, and cutoff within the same CatwalkDataset}
 }
+\value{
+A CatwalkDataset object containing the newly generated models
+}
 \description{
 Performs aov modeling on the dependent variables in a given dataset, using the relationship of the independent variables as dictated by the designated formula
 }

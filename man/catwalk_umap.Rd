@@ -9,7 +9,7 @@ catwalk_umap(
   dataname = c("data_norm", "data_clean"),
   umap_config = umap.defaults,
   return = "plot",
-  color = NULL
+  color = "group"
 )
 }
 \arguments{
@@ -21,7 +21,8 @@ catwalk_umap(
 
 \item{return}{A string indicating the output format. Valid options are "plot" (default), "data", or "all".}
 
-\item{color}{A string indicating the name of the column in the data set to be used for color-coding points in the plot.}
+\item{color}{A string indicating the name of the column in the data set to be used for color-coding points in the plot.
+default is for all points to be colored black.}
 }
 \value{
 If \code{return} is "plot" (default), returns a ggplot object showing the UMAP projection of the data.

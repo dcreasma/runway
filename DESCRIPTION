@@ -25,5 +25,6 @@ Imports:
     rlang,
     stats,
     scales,
-    A86
+    A86,
+    umap
 Remotes: dcreasma/A86
